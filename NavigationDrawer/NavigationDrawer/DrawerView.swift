@@ -29,12 +29,12 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
     var lblunderLine = UILabel()
     var imgBg : UIImage?
     var fontNew : UIFont?
-
+    
     fileprivate var imgProPic = UIImageView()
     fileprivate let imgBG = UIImageView()
     fileprivate var lblUserName = UILabel()
     fileprivate var gradientLayer: CAGradientLayer!
-
+    
     convenience init(aryControllers: NSArray, isBlurEffect:Bool, isHeaderInTop:Bool, controller:UIViewController) {
         self.init(frame: UIScreen.main.bounds)
         self.tblVw.register(UINib.init(nibName: "DrawerCell", bundle: nil), forCellReuseIdentifier: "DrawerCell")
@@ -85,7 +85,7 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         fontNew = font
         self.tblVw.reloadData()
     }
-
+    
     func initialise(controllers:NSArray, isBlurEffect:Bool, isHeaderInTop:Bool, controller:UIViewController) {
         currentViewController = controller
         currentViewController.tabBarController?.tabBar.isHidden = true
@@ -94,7 +94,7 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         drawerView.backgroundColor = UIColor.clear
         backgroundView.backgroundColor = UIColor.black
         backgroundView.alpha = 0.6
-
+        
         // Initialize the tap gesture to hide the drawer.
         let tap = UITapGestureRecognizer(target: self, action: #selector(DrawerView.actDissmiss))
         backgroundView.addGestureRecognizer(tap)
@@ -102,12 +102,12 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         
         drawerView.frame = CGRect(x:0, y:0, width:screenSize.width/2+75, height:screenSize.height)
         drawerView.clipsToBounds = true
-
+        
         // Initialize the gradient color for background view
         gradientLayer = CAGradientLayer()
         gradientLayer.frame = drawerView.bounds
         gradientLayer.colors = [UIColor.white.cgColor, UIColor.darkGray.cgColor]
-
+        
         imgBG.frame = drawerView.frame
         imgBG.image = imgBg ?? #imageLiteral(resourceName: "proPicOne.png")
         
@@ -134,7 +134,7 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
             vwForHeader = UIView(frame:CGRect(x:0, y:20, width:drawerView.frame.size.width, height:75))
             self.lblunderLine = UILabel(frame:CGRect(x:vwForHeader.frame.origin.x+10, y:vwForHeader.frame.size.height - 1 , width:vwForHeader.frame.size.width-20, height:1.0))
             tblVw.frame = CGRect(x:0, y:vwForHeader.frame.origin.y+vwForHeader.frame.size.height, width:screenSize.width/2+75, height:screenSize.height-100)
-
+            
         }else{
             tblVw.frame = CGRect(x:0, y:20, width:screenSize.width/2+75, height:screenSize.height-100)
             vwForHeader = UIView(frame:CGRect(x:0, y:tblVw.frame.origin.y+tblVw.frame.size.height, width:drawerView.frame.size.width, height:screenSize.height - tblVw.frame.size.height))
@@ -145,10 +145,10 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         aryViewControllers = controllers
         tblVw.delegate = self
         tblVw.dataSource = self
-        tblVw.backgroundColor = UIColor.clear   
+        tblVw.backgroundColor = UIColor.clear
         drawerView.addSubview(tblVw)
         tblVw.reloadData()
-
+        
         lblunderLine.backgroundColor = UIColor.groupTableViewBackground
         vwForHeader.addSubview(lblunderLine)
         
@@ -167,13 +167,14 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         imgProPic.contentMode = .scaleAspectFit
         vwForHeader.addSubview(imgProPic)
         
-        lblUserName = UILabel(frame:CGRect(x:btnLogOut.frame.origin.x, y:btnLogOut.frame.origin.y+btnLogOut.frame.size.height-5, width:btnLogOut.frame.size.width, height:25))
+        lblUserName = UILabel(frame:CGRect(x:btnLogOut.frame.origin.x, y:btnLogOut.frame.origin.y+btnLogOut.frame.size.height-5, width:btnLogOut.frame.size.width, height:35))
         lblUserName.text = "No Name"
         lblUserName.font = UIFont(name: "Euphemia UCAS", size: 11)
         lblUserName.textAlignment = .left
         lblUserName.textColor = UIColor.lightText
+        lblUserName.numberOfLines = 2
         vwForHeader.addSubview(lblUserName)
-
+        
         drawerView.addSubview(vwForHeader)
         addSubview(drawerView)
     }
@@ -194,7 +195,7 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         cell.lblController.textColor = self.cellTextColor ?? UIColor.white
         cell.lblController.font = fontNew ?? UIFont(name: "Euphemia UCAS", size: 18)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
-
+        
         return cell
     }
     
@@ -205,15 +206,15 @@ class DrawerView: UIView, drawerProtocolNew, UITableViewDelegate, UITableViewDat
         controllerName.hidesBottomBarWhenPushed = true
         self.delegate?.pushTo(viewController: controllerName)
     }
-
+    
     // To dissmiss the current view controller tab bar along with navigation drawer
-    func actDissmiss() {
+    @objc func actDissmiss() {
         currentViewController.tabBarController?.tabBar.isHidden = false
         self.dissmiss()
     }
     
     // Action for logout to quit the application.
-    func actLogOut() {
+    @objc func actLogOut() {
         exit(0)
     }
 }
